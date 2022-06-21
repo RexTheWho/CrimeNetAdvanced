@@ -1,0 +1,28 @@
+<table name="CrimeNetAdvanced" global_key="CrimeNetAdvanced">
+    <Localization directory="loc" default="english.txt">
+        <loc file="english.txt" language="english"/>
+    </Localization>
+	
+	<Options save_file="CrimeNetAdvanced.txt">
+		<options node_name="cnmap" title_id="cnmap" desc_id="cnmap_desc" build_items="true">
+			<option name="cnmap_enabled" save_value="true" type="bool" show_value="true" default_value="true"/>
+			<option name="cnmap_update" save_value="true" type="number" show_value="true" default_value="0.2" min="0.01" max="1.0"/>
+		</options>
+	</Options>
+	
+	<AddFiles directory="assets">
+		<dds force="true" path="guis/textures/cn_map/washington_dc"/>
+		
+		<dds force="true" path="guis/textures/pd2/crimenet_star_half"/>
+		<dds force="true" path="guis/textures/pd2/crimenet_skull"/>
+		<dds force="true" path="guis/textures/pd2/crimenet_skull_4"/>
+		<dds force="true" path="guis/textures/pd2/crimenet_skull_5"/>
+		<dds force="true" path="guis/textures/pd2/crimenet_skull_6"/>
+		
+		<dds force="true" path="guis/textures/pd2/crimenet_marker_normal_outline"/>
+		<dds force="true" path="guis/textures/pd2/crimenet_marker_mutator_outline"/>
+		<dds force="true" path="guis/textures/pd2/crimenet_marker_contract"/>
+		<dds force="true" path="guis/textures/pd2/crimenet_marker_contract_server"/>
+		
+	</AddFiles>
+</table>

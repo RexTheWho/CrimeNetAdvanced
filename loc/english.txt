@@ -1,0 +1,11 @@
+{
+	"menu_cn_vit_heist_desc":							"The greatest heist of all",
+	
+	"cnmap":											"CrimeNet Advanced",
+	"cnmap_desc":										"CrimeNet Advanced Settings.",
+	
+	"CrimeNetAdvanced_enabledTitleID":					"A",
+	"CrimeNetAdvanced_enabledDescID":					"B.",
+	"CrimeNetAdvanced_updateTitleID":					"A",
+	"CrimeNetAdvanced_updateDescID":					"B."
+}
