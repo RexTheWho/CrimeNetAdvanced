@@ -1,6 +1,24 @@
 NarrativeTweakData.RELEASE_WINDOW = 7 -- days
+NarrativeTweakData.FACTION_TO_LOCATION = {
+	federales = "mexico",
+	russia = "russia"
+}
 
 Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak_data)
+
+	-- guis/textures/cn_map/..id
+	self.cn_locations = {
+		"washington_dc",
+		"new_york",
+		"nevada",
+		"los_angeles",
+		"texas",
+		"mexico",
+		"florida",
+		"russia",
+		"san_francisco"
+	}
+	-- table.insert(self.cn_locations, "minecraft")
 	
 	self.jobs.arm_wrapper.cn_mobile = true
 	self.jobs.arm_cro.cn_mobile = true
@@ -32,16 +50,20 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	
 	
 	
+	
+	-- LOCATIONS
+	self:assume_cn_job_locations_from_levels(self, tweak_data)
+	
 	-- CN MAPS (Default's "dc")
-	self.jobs.red2.cn_map = "nyc"
-	self.jobs.run.cn_map = "nyc"
-	self.jobs.flat.cn_map = "nyc"
-	self.jobs.glace.cn_map = "nyc"
-	self.jobs.dah.cn_map = "nyc"
-	self.jobs.fish.cn_map = "nyc"
-	self.jobs.spa.cn_map = "nyc"
-	self.jobs.brb.cn_map = "nyc"
-	self.jobs.moon.cn_map = "nyc"
+	self.jobs.red2.cn_map = "new_york"
+	self.jobs.run.cn_map = "new_york"
+	self.jobs.flat.cn_map = "new_york"
+	self.jobs.glace.cn_map = "new_york"
+	self.jobs.dah.cn_map = "new_york"
+	self.jobs.fish.cn_map = "new_york"
+	self.jobs.spa.cn_map = "new_york"
+	self.jobs.brb.cn_map = "new_york"
+	self.jobs.moon.cn_map = "new_york"
 	
 	self.jobs.kenaz.cn_map = "nevada"
 	self.jobs.pbr.cn_map = "nevada"
@@ -49,25 +71,28 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	self.jobs.born.cn_map = "nevada"
 	self.jobs.des.cn_map = "nevada"
 	
-	self.jobs.rvd.cn_map = "la"
-	self.jobs.jolly.cn_map = "la"
+	self.jobs.rvd.cn_map = "los_angeles"
+	self.jobs.jolly.cn_map = "los_angeles"
 	
-	self.jobs.mex.cn_map = "mex"
-	self.jobs.mex_cooking.cn_map = "mex"
-	self.jobs.bex.cn_map = "mex"
-	self.jobs.pex.cn_map = "mex"
-	self.jobs.fex.cn_map = "mex"
+	self.jobs.mex.cn_map = "mexico"
+	self.jobs.mex_cooking.cn_map = "mexico"
+	self.jobs.bex.cn_map = "mexico"
+	self.jobs.pex.cn_map = "mexico"
+	-- self.jobs.fex.cn_map = "mexico"
 	
 	self.jobs.dinner.cn_map = "texas"
+	self.jobs.ranc.cn_map = "texas"
+	
+	-- self.jobs.mad.cn_map = "russia"
 	
 	self.jobs.pal.cn_map = "florida"
 	self.jobs.friend.cn_map = "florida"
 	self.jobs.mia.cn_map = "florida"
 	
-	self.jobs.chas.cn_map = "sanfran"
-	self.jobs.sand.cn_map = "sanfran"
-	self.jobs.chca.cn_map = "sanfran"
-	self.jobs.pent.cn_map = "sanfran"
+	self.jobs.chas.cn_map = "san_francisco"
+	self.jobs.sand.cn_map = "san_francisco"
+	self.jobs.chca.cn_map = "san_francisco"
+	self.jobs.pent.cn_map = "san_francisco"
 	
 	
 	-- Job story connections
@@ -127,7 +152,7 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	self:cn_position_list(true, {1208,1736}, {
 		"crojob1",
 		"crojob_wrapper"
-	},{28,6})
+	})
 	
 	self.jobs.firestarter.cn_position = {1256, 1600}
 	self.jobs.nightclub.cn_position = {893,910}
@@ -165,15 +190,89 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	self.jobs.help.cn_position = {790,310}
 	-- DC
 	
+	-- NEW YORK
+	self.jobs.red2.cn_position = {950,930}
+	self.jobs.run.cn_position = {915,1200}
+	self.jobs.flat.cn_position = {1431,1169}
+	self.jobs.glace.cn_position = {950,1600}
+	self.jobs.dah.cn_position = {1030,780}
+	self.jobs.fish.cn_position = {471,1740}
+	self.jobs.spa.cn_position = {1691,776}
+	self.jobs.brb.cn_position = {1011,1800}
+	self.jobs.moon.cn_position = {1370,1685}
+	-- NEW YORK
+	
+	-- NEVADA
+	self:cn_position_list(true, {1024,750}, {
+		"kenaz",
+		"pbr",
+		"born",
+		"des"
+	})
+	-- NEVADA
+	
+	-- LOS ANGELES
+	self:cn_position_list(true, {1024,750}, {
+		"rvd",
+		"jolly"
+	})
+	-- LOS ANGELES
+	
+	-- TEXAS
+	self.jobs.dinner.cn_position = {903,773}
+	self.jobs.ranc.cn_position = {634,693}
+	-- TEXAS
+	
+	-- MEXICO
+	self:cn_position_list(true, {1024,750}, {
+		"mex",
+		"mex_cooking",
+		"bex",
+		"pex",
+		"fex"
+	})
+	-- MEXICO
+	
+	-- FLORIDA
+	self:cn_position_list(true, {1024,750}, {
+		"pal",
+		"friend",
+		"mia"
+	})
+	-- FLORIDA
+	
+	-- SAN FRANCISCO
+	self:cn_position_list(true, {1024,750}, {
+		"chas",
+		"sand",
+		"chca",
+		"pent"
+	})
+	self.jobs.chas.cn_position = {1442,1125}
+	self.jobs.sand.cn_position = {1156,653}
+	self.jobs.chca.cn_position = {1550,380}
+	self.jobs.pent.cn_position = {1580,1163}
+	self.jobs.bph.cn_position = {800,393}
+	-- SAN FRANCISCO
+	
+	-- RUSSIA
+	self:cn_position_list(true, {1024,750}, {
+		"wz_akan",
+		"mad"
+	})
+	-- RUSSIA
 	
 	
 	
-	--[[ EXAMPLE JOB FOR CUSTOM ICONS, strictly 85 by 60!
+	--[[ EXAMPLE JOB FOR CUSTOM ICONS, strictly 85 by 60!*
 	self.jobs.example.cn_icon_id = {
 		texture = "guis/custom/texture",
 		texture_rect = {0,0,85,60}
 	}
 	]]--
+	
+	-- Achievement icons to job icons
+	-- I cant even automate this because of the weird names :(
 	
 	-- bain
 	self.jobs.arena.cn_icon_id = tweak_data.hud_icons.C_Bain_H_Arena_AllDiffs_D0
@@ -281,7 +380,31 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	-- shayu
 	self.jobs.pent.cn_icon_id = tweak_data.hud_icons.C_Shayu_H_MountainMaster_AllDiffs_D0
 	
+	-- shayu
+	self.jobs.ranc.cn_icon_id = tweak_data.hud_icons.C_McShay_H_MindlandRanch_AllDiffs_D0 
+	
 end)
+
+
+-- assumes location by chains level factions
+function NarrativeTweakData:assume_cn_job_locations_from_levels(self, tweak_data)
+	local levels_tweak = tweak_data.levels
+	if not levels_tweak then log("levels_tweak "..tostring(levels_tweak)) return end
+	
+	for _,job_id in ipairs(self._jobs_index) do
+		local job = self.jobs[job_id]
+		if job then
+			for _,level in ipairs(job.chain) do
+				local level_id = level.level_id
+				local faction = not not levels_tweak[level_id] and levels_tweak[level_id].ai_group_type or nil
+				if faction and levels_tweak[level_id] and NarrativeTweakData.FACTION_TO_LOCATION[faction] then
+					self.jobs[job_id].cn_map = NarrativeTweakData.FACTION_TO_LOCATION[faction]
+					break
+				end
+			end
+		end
+	end
+end
 
 
 function NarrativeTweakData:cn_position_list(vertical, position, jobs, offset)

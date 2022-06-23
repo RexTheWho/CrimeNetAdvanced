@@ -7,5 +7,23 @@
 	"CrimeNetAdvanced_enabledTitleID":					"A",
 	"CrimeNetAdvanced_enabledDescID":					"B.",
 	"CrimeNetAdvanced_updateTitleID":					"A",
-	"CrimeNetAdvanced_updateDescID":					"B."
+	"CrimeNetAdvanced_updateDescID":					"B.",
+	
+	
+	
+	"menu_cn_location_show":		"$BTN_X Show Locations",
+	"menu_cn_location_hide":		"$BTN_X Hide Locations",
+	"menu_toggle_locations":		"$BTN_X Toggle Locations",
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	"":""
 }

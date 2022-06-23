@@ -3,6 +3,7 @@
 	"description" : "CrimeNetAdvanced",
 	"author" : "Rex",
 	"contact" : "",
+	"priority" : "100",
 	"version" : "1",
 	"hooks" : [
 		{ "hook_id" : "lib/managers/crimenetmanager", "script_path" : "hooks/crimenetmanager.lua" },

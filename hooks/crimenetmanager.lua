@@ -1,13 +1,10 @@
 
+-- MultiLocationItemGui
+dofile(ModPath .. "classes/MultiLocationItemGui.lua")
+
 CrimeNetManager.MOBILE_JOBS_SPEED = 7.0
 CrimeNetManager.log_presets = false
 CrimeNetManager.dont_build_presets = true
-
--- INIT (POSTHOOK)
-Hooks:PostHook(CrimeNetManager, "init", "init_advanced", function(self)
-	
-end)
-
 
 
 function CrimeNetGui:_get_random_location()
@@ -305,6 +302,72 @@ function CrimeNetManager:update(t, dt)
 end
 
 
+
+
+function CrimeNetManager:open_quick_location_select()
+	local dialog_data = {
+		title = "CRIME.NET/TRAVEL_DATABASE",
+		text = "Select a location:",
+		button_list = {}
+	}
+
+	for idx, loc_id in pairs(tweak_data.narrative.cn_locations) do
+		local text = loc_id
+		local clean_name = string.gsub(utf8.to_upper(text), "_", " ")
+		
+		table.insert(dialog_data.button_list, {
+			text = clean_name .. " «",
+			callback_func = function()
+				-- log("picked ("..tostring(idx)..") "..loc_id)
+				self:set_crimenet_location(idx)
+			end,
+			focus_callback_func = function()
+				-- nothing
+			end
+		})
+	end
+
+	local divider = {
+		no_text = true,
+		no_selection = true
+	}
+
+	table.insert(dialog_data.button_list, divider)
+
+	local no_button = {
+		text = managers.localization:text("dialog_cancel"),
+		focus_callback_func = function()
+			-- nothing
+		end,
+		cancel_button = true
+	}
+
+	table.insert(dialog_data.button_list, no_button)
+
+	dialog_data.image_blend_mode = "normal"
+	dialog_data.text_blend_mode = "add"
+	dialog_data.use_text_formating = true
+	dialog_data.w = 480
+	dialog_data.h = 532
+	dialog_data.title_font = tweak_data.menu.pd2_medium_font
+	dialog_data.title_font_size = tweak_data.menu.pd2_medium_font_size
+	dialog_data.font = tweak_data.menu.pd2_small_font
+	dialog_data.font_size = tweak_data.menu.pd2_small_font_size
+	dialog_data.text_formating_color = Color.white
+	dialog_data.text_formating_color_table = {}
+	dialog_data.clamp_to_screen = true
+
+	managers.system_menu:show_buttons(dialog_data)
+end
+
+
+
+function CrimeNetManager:set_crimenet_location(idx)
+	local cn_gui = managers.menu_component._crimenet_gui
+	cn_gui._multi_location_item:set_location_index(idx)
+	cn_gui:update_location(idx)
+end
+
 --
 function CrimeNetManager:_log_all_presets(pre)
 	for k,v in ipairs(pre) do
@@ -336,6 +399,7 @@ CrimeNetGui._missing_job_icon = {
 
 -- INIT (REPLACEMENT)
 function CrimeNetGui:init(ws, fullscreeen_ws, node)
+	
 	self._tweak_data = tweak_data.gui.crime_net
 	self._crimenet_enabled = true
 	
@@ -600,7 +664,12 @@ function CrimeNetGui:init(ws, fullscreeen_ws, node)
 	blur_object:set_shape(self._zoom_text:shape())
 	
 	
-	-- Crimenet Legend Keys
+	-- Crimenet Country/State Button
+	self._multi_location_item = MultiLocationItemGui:new(self._ws, self._panel)
+	
+	
+	
+	-- START OF LEGEND KEY PANEL
 	local legends_button = self._panel:text({
 		name = "legends_button",
 		blend_mode = "add",
@@ -888,6 +957,7 @@ function CrimeNetGui:init(ws, fullscreeen_ws, node)
 		h = legend_panel:h()
 	})
 	legend_panel:set_right(self._panel:w() - 10)
+	-- END OF LEGEND KEY PANEL
 
 	local w, h = nil
 	local mw = 0
@@ -1266,6 +1336,11 @@ Hooks:PostHook(CrimeNetGui, "init", "init_advanced", function(self)
 end)
 
 
+Hooks:PreHook(CrimeNetGui, "_remove_gui_job", "_remove_gui_job_advanced", function(self, data)
+	self._pan_panel:remove(data.marker_panel_bg)
+end)
+
+
 -- UPDATE GUI POSTHOOK
 Hooks:PostHook(CrimeNetGui, "update", "update_advanced", function(self, t, dt)
 	if self._zoom_text then
@@ -1282,11 +1357,14 @@ Hooks:PostHook(CrimeNetGui, "update", "update_advanced", function(self, t, dt)
 end)
 
 
+-- both move_players_online and set_players_online_pos need updating
 Hooks:PostHook(CrimeNetGui, "move_players_online", "move_players_online_advanced", function(self, x, y)
 	local zoom_text = self._zoom_text
 
 	zoom_text:move(x or 0, y or 0)
 	self._panel:child("map_coord_text_blur"):set_shape(zoom_text:shape())
+	
+	self._multi_location_item:recenter(self._panel, x)
 end)
 
 
@@ -1302,47 +1380,60 @@ Hooks:PostHook(CrimeNetGui, "set_players_online_pos", "set_players_online_pos_ad
 	end
 
 	self._panel:child("map_coord_text_blur"):set_shape(zoom_text:shape())
+	
+	self._multi_location_item:recenter(self._panel, x)
 end)
 
 -- _change_map
---[[
-function CrimeNetGui:_change_map()
-	log("NEW MAP")
-	-- new map
+function CrimeNetGui:update_location(idx)
+	local location_id = tweak_data.narrative.cn_locations[idx]
 	
-	self._fullscreen_panel:set_w(1024*4)
-	self._fullscreen_panel:set_h(1024*4)
+	local map = self._map_panel:child("map")
+	
+	local pw,ph = map:w(), map:h()
 	
 	self._map_panel:remove( self._map_panel:child("map") )
-	self._map_panel:set_w(1024*4)
-	self._map_panel:set_h(1024*4)
-	
-	local pw,ph = self._map_panel:w(), self._map_panel:h()
-	
-	self._map_panel:bitmap({
-		texture = "guis/textures/cn_map/washington_dc",
+	map = self._map_panel:bitmap({
+		texture = "guis/textures/cn_map/"..location_id,
 		name = "map",
-		layer = 0,--
+		layer = 0,
 		w = pw,
 		h = ph
 	})
+	map:set_halign("scale")
+	map:set_valign("scale")
+	self._map_panel:set_w(1024*4)
+	self._map_panel:set_h(1024*4)
 	
-	-- local pw,ph = self._map_panel:w(), self._map_panel:h()
-	-- self._map_panel:bitmap({
-		-- texture = "guis/textures/crimenet_map_nevada",
-		-- name = "map",
-		-- layer = 0,
-		-- w = pw,
-		-- h = ph
-	-- })
+	
+	-- fade
+	managers.menu_component:play_transition()
+	
+	
+	-- clear jobs
+	local all_jobs = {}
 
+	for i, data in pairs(self._jobs) do
+		if not data.is_server then
+			all_jobs[i] = data
+		end
+	end
+	
+	for i, job in pairs(all_jobs) do
+		self:remove_job(i, true)
+	end
+	
+	self:add_special_contracts(false, false)
+	
+	-- fixes zoom/position when changing map.
+	self:_goto_map_position(602+640,558+360)
 end
-]]--
 
 Hooks:PostHook(CrimeNetGui, "enable_crimenet", "enable_crimenet_advanced", function(self)
 	if not self._crimenet_ambience then
 		self._crimenet_ambience = managers.menu_component:post_event( "crimenet_ambience" )
 	end
+	self._multi_location_item:show()
 end)
 
 Hooks:PostHook(CrimeNetGui, "disable_crimenet", "disable_crimenet_advanced", function(self)
@@ -1350,6 +1441,7 @@ Hooks:PostHook(CrimeNetGui, "disable_crimenet", "disable_crimenet_advanced", fun
 		self._crimenet_ambience:stop()
 		self._crimenet_ambience = nil
 	end
+	self._multi_location_item:hide()
 end)
 
 Hooks:PostHook(CrimeNetGui, "close", "close_advanced", function(self)
@@ -1443,7 +1535,128 @@ Hooks:PostHook(CrimeNetGui, "_set_zoom", "_set_zoom_advanced", function(self, zo
 end)
 
 
+-- mouse moved post hook
+Hooks:PostHook(CrimeNetGui, "mouse_moved", "mouse_moved_advanced", function(self, o, x, y)
+	self._multi_location_item:mouse_moved(x, y)
+end)
 
+
+-- replaced the function since had dragging issues with _multi_location_item
+function CrimeNetGui:mouse_pressed(o, button, x, y)
+	if not self._crimenet_enabled then
+		return
+	end
+
+	if self._getting_hacked then
+		return
+	end
+
+	if not self:input_focus() then
+		return
+	end
+
+	if self:mouse_button_click(button) then
+		if self._panel:child("back_button"):inside(x, y) then
+			managers.menu:back()
+
+			return
+		end
+
+		if self._panel:child("legends_button"):inside(x, y) then
+			self:toggle_legend()
+
+			return
+		end
+		
+		if self._multi_location_item:panel():inside(x, y) then
+			self._multi_location_item:mouse_pressed(button, x, y)
+			
+			return
+		end
+
+		if self._panel:child("filter_button") and self._panel:child("filter_button"):inside(x, y) then
+			managers.menu_component:post_event("menu_enter")
+			managers.menu:open_node("crimenet_filters", {})
+
+			return
+		end
+
+		if self:check_job_pressed(x, y) then
+			return true
+		end
+
+		if self._panel:inside(x, y) then
+			self._released_map = nil
+			self._grabbed_map = {
+				x = x,
+				y = y,
+				dirs = {}
+			}
+		end
+	elseif self:button_wheel_scroll_down(button) then
+		if self._one_scroll_out_delay then
+			self._one_scroll_out_delay = nil
+		end
+
+		self:_set_zoom("out", x, y)
+
+		return true
+	elseif self:button_wheel_scroll_up(button) then
+		if self._one_scroll_in_delay then
+			self._one_scroll_in_delay = nil
+		end
+
+		self:_set_zoom("in", x, y)
+
+		return true
+	end
+
+	return true
+end
+
+
+-- button version
+function CrimeNetGui:special_btn_pressed(button)
+	if not self._crimenet_enabled then
+		return false
+	end
+
+	if self._getting_hacked then
+		return
+	end
+
+	if button == Idstring("menu_toggle_legends") then
+		self:toggle_legend()
+
+		return true
+	elseif button == Idstring("menu_change_profile_right") then
+		self._multi_location_item:trigger_next_location()
+		return true
+	elseif button == Idstring("menu_change_profile_left") then
+		self._multi_location_item:trigger_previous_location()
+		
+		return true
+	end
+
+	if not managers.network:session() and not Global.game_settings.single_player and button == Idstring("menu_toggle_filters") then
+		managers.menu_component:post_event("menu_enter")
+
+		if is_x360 then
+			XboxLive:show_friends_ui(managers.user:get_platform_id())
+		elseif is_xb1 then
+			managers.menu:open_node("crimenet_contract_smart_matchmaking", {})
+		else
+			managers.menu:open_node("crimenet_filters", {})
+		end
+
+		return true
+	end
+
+	return false
+end
+
+
+-- SCALE ICONS
 function CrimeNetGui:_update_job_by_zoom(job, ignore_zoom, icon_zoom_scale)
 	
 	ignore_zoom = ignore_zoom or false
@@ -1459,20 +1672,27 @@ function CrimeNetGui:_update_job_by_zoom(job, ignore_zoom, icon_zoom_scale)
 	
 	-- Cheating for looping over a bunch if icons to either show or hide based on zoom
 	local toggle_childs = {
-		-- job.marker_panel:child("marker_dot"),
-		job.side_panel:child("job_name"),
-		job.side_panel:child("contact_name"),
-		job.side_panel:child("info_name"),
-		job.side_panel:child("stars_panel"),
+		job.side_panel,
+		-- job.side_panel:child("job_name"),
+		-- job.side_panel:child("contact_name"),
+		-- job.side_panel:child("info_name"),
+		-- job.side_panel:child("stars_panel"),
 		job.icon_panel,
+		job.container_panel,
 		job.marker_panel_bg
 	}
 	
+	-- icons
+	for _,child in ipairs(job.icon_panel:children()) do
+		table.insert(toggle_childs, child)
+	end
+	
+	-- side
 	for _,child in ipairs(job.side_panel:children()) do
 		table.insert(toggle_childs, child)
 	end
 	
-	for k,item in pairs(toggle_childs) do
+	for _,item in ipairs(toggle_childs) do
 		if item then
 			if icon_zoom_scale >= 1 then
 				item:show()
@@ -1500,6 +1720,13 @@ function CrimeNetGui:_update_job_by_zoom(job, ignore_zoom, icon_zoom_scale)
 		job.marker_panel_bg:set_w(96 * icon_zoom_scale)
 		job.marker_panel_bg:set_h(64 * icon_zoom_scale)
 		job.marker_panel_bg:set_world_center(select_panel:world_center())
+	end
+	
+	if job.heat_glow then
+		local heat_size = 256 * icon_zoom_scale
+		job.heat_glow:set_w(heat_size)
+		job.heat_glow:set_h(heat_size)
+		job.heat_glow:set_world_center(job.marker_panel:child("select_panel"):world_center())
 	end
 	
 	if job.peers_panel then
@@ -1672,9 +1899,10 @@ function CrimeNetGui:add_special_contracts(no_casino, no_quickplay)
 		
 		local job_data = tweak_data.narrative:job_data(special_contract.job_id)
 		if job_data then
-			local filter_loc = "dc"
-			local cn_map_loc = job_data.cn_map or "dc"
-			-- log("Check: " .. special_contract.job_id .. cn_map_loc .. " / " .. filter_loc)
+			local cn_locations = tweak_data.narrative.cn_locations
+			local filter_loc = cn_locations[self._multi_location_item._current_name_index]
+			local cn_map_loc = job_data.cn_map or cn_locations[1]
+			-- log("Check: " .. special_contract.job_id .. " - " .. cn_map_loc .. " / " .. filter_loc)
 			skip = skip or cn_map_loc ~= filter_loc
 		end
 		
@@ -1955,15 +2183,15 @@ end
 
 
 -- icons use primary and secondary, secondary is outlines and glowies
-function CrimeNetGui:get_job_colors(is_unlocked, is_dlc_unlocked, is_professional, is_job_new)
-	local color = is_unlocked and Color.white or tweak_data.screen_colors.cn_locked											-- Normal or Faded
+function CrimeNetGui:get_job_colors(is_unlocked, is_dlc_unowned, is_professional, is_job_new)
+	local color = is_unlocked and Color.white or tweak_data.screen_colors.cn_locked										-- Normal or Faded
 	
-	local color_secondary = (not is_unlocked and not is_dlc_unlocked)	and tweak_data.screen_colors.cn_dlc_color_dark or	-- Semi-Faded
-							(not is_unlocked)							and tweak_data.screen_colors.cn_locked_dark or      -- Faded
-							is_professional								and tweak_data.screen_colors.pro_color or           -- Red
-							is_job_new									and tweak_data.screen_colors.brand_new or           -- Green
-							(not is_dlc_unlocked)						and tweak_data.screen_colors.dlc_color or           -- Yellow
-																		tweak_data.screen_colors.regular_color              -- Normal
+	local color_secondary = (not is_unlocked and is_dlc_unowned)	and tweak_data.screen_colors.cn_dlc_color_dark or	-- Semi-Faded
+							(not is_unlocked)						and tweak_data.screen_colors.cn_locked_dark or      -- Faded
+							is_professional							and tweak_data.screen_colors.pro_color or           -- Red
+							is_job_new								and tweak_data.screen_colors.brand_new or           -- Green
+							is_dlc_unowned							and tweak_data.screen_colors.dlc_color or           -- Yellow
+																	tweak_data.screen_colors.regular_color              -- Normal
 
 	return color, color_secondary
 end
@@ -1996,10 +2224,14 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	local y = fixed_y
 	local location = fixed_location
 	local is_job_new = tweak_data.narrative:is_job_new(data.job_id)
-	local dlc_unlocked = (not data.dlc or managers.dlc:is_dlc_unlocked(data.dlc))
+	
+	local dlc_unowned = false
+	if data.dlc then
+		dlc_unowned = not managers.dlc:is_dlc_unlocked(data.dlc)
+	end
 	
 	-- General bool for if the icon should be locked
-	local is_unlocked = not (data.level_locked and data.level_locked == true) and dlc_unlocked
+	local is_unlocked = not (data.level_locked and data.level_locked == true) and not dlc_unowned
 	
 	--
 	if is_special then
@@ -2031,7 +2263,7 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	local marker_panel_margin_y = (marker_panel_size_y - 32)/2
 	
 	
-	local color, color_secondary = self:get_job_colors(is_unlocked, dlc_unlocked, is_professional, is_job_new)
+	local color, color_secondary = self:get_job_colors(is_unlocked, dlc_unowned, is_professional, is_job_new)
 	
 	
 	local friend_color = tweak_data.screen_colors.friend_color
@@ -2279,7 +2511,8 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 			heat_glow:set_alpha(heat_alpha)
 		end
 	end
-
+	
+	-- Apply plusminus xp text (Ghost bonus and Heat bonus)
 	heat_name:set_text(text_string)
 
 	for i, range in ipairs(range_colors) do
@@ -2314,7 +2547,7 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 		managers.localization:to_upper_text(("bm_menu_level_req"), {level = job_jc}) or
 		
 		-- DLC locked
-		(not not data.dlc and not data.dlc_unlocked) and
+		data.dlc and dlc_unowned and
 		managers.localization:to_upper_text(tweak_data.lootdrop.global_values[data.dlc].unlock_id) or
 		
 		-- Just day info
@@ -2514,7 +2747,7 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	heat_name:set_size(w, h - 4)
 	
 	
-	heat_name:set_top(one_down_active and one_down_label:bottom() - 3 or difficulty_name and difficulty_name:bottom() - 3 or contact_name:bottom())
+	heat_name:set_top(one_down_active and one_down_label:bottom() + (h/2) - 3 or difficulty_name and difficulty_name:bottom() + (h/2) - 3 or contact_name:bottom())
 	heat_name:set_right(0)
 
 	if not got_heat_text then
@@ -2748,8 +2981,8 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	
 	
 	-- OUTLINE
-	if is_professional or data.mutators or not dlc_unlocked or is_job_new then
-		-- local outline_type = (not not data.mutators) and "mutator" or (not dlc_unlocked) and "dlc" or "pro"
+	if is_professional or data.mutators or dlc_unowned or is_job_new then
+		-- local outline_type = (not not data.mutators) and "mutator" or (dlc_unowned) and "dlc" or "pro"
 		local outline_type = (not not data.mutators) and "mutator" or "normal"
 		local outline_tex = pd2_cn_marker.. outline_type .."_outline"
 		local marker_outline = marker_panel_bg:bitmap({
@@ -3084,7 +3317,7 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 		skirmish = data.skirmish,
 		skirmish_wave = data.skirmish_wave,
 		skirmish_weekly_modifiers = data.skirmish_weekly_modifiers,
-		dlc_unlocked = dlc_unlocked,
+		dlc_unowned = dlc_unowned,
 		is_unlocked = is_unlocked
 	}
 
