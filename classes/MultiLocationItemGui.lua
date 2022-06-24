@@ -115,7 +115,7 @@ end
 function MultiLocationItemGui:update()
 	if not self._enabled then return end
 	
-	local locations = tweak_data.narrative.cn_locations
+	local locations = tweak_data.narrative:get_locations_in_job_count_order()
 	local name = self._current_name_index and locations[self._current_name_index] or locations[1]
 	
 	self._name_text = self._profile_panel:child("name")
@@ -350,19 +350,19 @@ end
 function MultiLocationItemGui:trigger() end
 
 
-function MultiLocationItemGui:trigger_next_location()
+function MultiLocationItemGui:trigger_previous_location()
 	self._current_name_index = self._current_name_index - 1
 	if self._current_name_index <= 0 then
-		self._current_name_index = #tweak_data.narrative.cn_locations
+		self._current_name_index = #tweak_data.narrative:get_locations_in_job_count_order()
 	end
 	self:update()
 	managers.crimenet:set_crimenet_location(self._current_name_index)
 end
 
 
-function MultiLocationItemGui:trigger_previous_location()
+function MultiLocationItemGui:trigger_next_location()
 	self._current_name_index = self._current_name_index + 1
-	if self._current_name_index > #tweak_data.narrative.cn_locations then
+	if self._current_name_index > #tweak_data.narrative:get_locations_in_job_count_order() then
 		self._current_name_index = 1
 	end
 	self:update()
@@ -371,7 +371,7 @@ end
 
 
 function MultiLocationItemGui:set_location_index(idx)
-	if idx > #tweak_data.narrative.cn_locations or idx < 1 then
+	if idx > #tweak_data.narrative:get_locations_in_job_count_order() or idx < 1 then
 		self._current_name_index = 1
 	else
 		self._current_name_index = idx

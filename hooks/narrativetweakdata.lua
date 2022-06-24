@@ -16,9 +16,9 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 		"mexico",
 		"florida",
 		"russia",
+		"minecraft",
 		"san_francisco"
 	}
-	-- table.insert(self.cn_locations, "minecraft")
 	
 	self.jobs.arm_wrapper.cn_mobile = true
 	self.jobs.arm_cro.cn_mobile = true
@@ -26,6 +26,8 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	self.jobs.arm_hcm.cn_mobile = true
 	self.jobs.arm_par.cn_mobile = true
 	self.jobs.arm_fac.cn_mobile = true
+	
+	self.jobs.ranc.date_added = {2022,6,23}
 	
 	-- self.jobs.arm_wrapper.professional = true
 	-- self.jobs.arm_cro.professional = true
@@ -39,6 +41,7 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	-- self.jobs.arm_fac.date_added = {tonumber(os.date("%Y")),tonumber(os.date("%m")),tonumber(os.date("%d"))}
 	-- self.jobs.arm_par.date_added = {tonumber(os.date("%Y")),tonumber(os.date("%m")),tonumber(os.date("%d"))}
 	-- self.jobs.arm_und.date_added = {tonumber(os.date("%Y")),tonumber(os.date("%m")),tonumber(os.date("%d"))}
+	-- self.jobs.ranc.date_added = {tonumber(os.date("%Y")),tonumber(os.date("%m")),tonumber(os.date("%d"))}
 	
 	-- self.jobs.vit.professional = true
 	
@@ -78,12 +81,12 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	self.jobs.mex_cooking.cn_map = "mexico"
 	self.jobs.bex.cn_map = "mexico"
 	self.jobs.pex.cn_map = "mexico"
-	-- self.jobs.fex.cn_map = "mexico"
+	self.jobs.fex.cn_map = "mexico"
 	
 	self.jobs.dinner.cn_map = "texas"
 	self.jobs.ranc.cn_map = "texas"
 	
-	-- self.jobs.mad.cn_map = "russia"
+	self.jobs.mad.cn_map = "russia"
 	
 	self.jobs.pal.cn_map = "florida"
 	self.jobs.friend.cn_map = "florida"
@@ -93,6 +96,7 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	self.jobs.sand.cn_map = "san_francisco"
 	self.jobs.chca.cn_map = "san_francisco"
 	self.jobs.pent.cn_map = "san_francisco"
+	self.jobs.bph.cn_map = "san_francisco"
 	
 	
 	-- Job story connections
@@ -180,7 +184,6 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	self.jobs.chill_combat.cn_position = self.jobs.chill.cn_position
 	self.jobs.hvh.cn_position = self:offset_cn_position(self.jobs.chill.cn_position, {-6,-SAFE_Y})
 	self.jobs.arena.cn_position = {1681,1105}
-	self.jobs.bph.cn_position = {1068,1860}
 	self.jobs.roberts.cn_position = {1008,568}
 	self.jobs.pines.cn_position = {890,361}
 	self.jobs.arm_for.cn_position = {1024,SAFE_BORDER}
@@ -197,9 +200,9 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	self.jobs.glace.cn_position = {950,1600}
 	self.jobs.dah.cn_position = {1030,780}
 	self.jobs.fish.cn_position = {471,1740}
-	self.jobs.spa.cn_position = {1691,776}
+	self.jobs.spa.cn_position = {1370,1685}
 	self.jobs.brb.cn_position = {1011,1800}
-	self.jobs.moon.cn_position = {1370,1685}
+	self.jobs.moon.cn_position = {1691,776}
 	-- NEW YORK
 	
 	-- NEVADA
@@ -212,10 +215,8 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	-- NEVADA
 	
 	-- LOS ANGELES
-	self:cn_position_list(true, {1024,750}, {
-		"rvd",
-		"jolly"
-	})
+	self.jobs.rvd.cn_position = {502,826}
+	self.jobs.jolly.cn_position = {528,456}
 	-- LOS ANGELES
 	
 	-- TEXAS
@@ -242,17 +243,11 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	-- FLORIDA
 	
 	-- SAN FRANCISCO
-	self:cn_position_list(true, {1024,750}, {
-		"chas",
-		"sand",
-		"chca",
-		"pent"
-	})
 	self.jobs.chas.cn_position = {1442,1125}
 	self.jobs.sand.cn_position = {1156,653}
 	self.jobs.chca.cn_position = {1550,380}
 	self.jobs.pent.cn_position = {1580,1163}
-	self.jobs.bph.cn_position = {800,393}
+	self.jobs.bph.cn_position = {1001,233}
 	-- SAN FRANCISCO
 	
 	-- RUSSIA
@@ -404,6 +399,87 @@ function NarrativeTweakData:assume_cn_job_locations_from_levels(self, tweak_data
 			end
 		end
 	end
+end
+
+
+function NarrativeTweakData:get_locations_in_job_count_order()
+	local narr = tweak_data.narrative
+	
+	-- cached
+	if narr._get_locations_in_job_count_order then
+		return narr._get_locations_in_job_count_order
+	end
+	
+	local counted_locations = {} -- washington_dc = 68
+	
+	for _,job_id in ipairs(narr._jobs_index) do
+		local cn_map = narr.jobs[job_id].cn_map or narr.cn_locations[1]
+		if counted_locations[cn_map] then
+			counted_locations[cn_map] = counted_locations[cn_map] + 1
+		else
+			counted_locations[cn_map] = 1
+		end
+	end
+	
+	
+	local nums = {}
+	for _,num in pairs(counted_locations) do
+		table.insert(nums,-num)--inverted
+	end
+	
+	table.sort(nums)
+	
+	local ordered_locations = {} -- 4321
+	for _,_num in ipairs(nums) do
+		local num = -_num--uninvert after sort
+		for k,cn_map in pairs(counted_locations) do
+			if counted_locations[k] == num and not table.contains(ordered_locations,k) then
+				table.insert(ordered_locations,k)
+			end
+		end
+	end
+	
+	narr._get_locations_in_job_count_order = ordered_locations
+	return ordered_locations
+end
+
+
+function NarrativeTweakData:get_location_used_count(location)
+	local narr = tweak_data.narrative
+	
+	-- cached
+	if narr._get_location_used_count then
+		return narr._get_location_used_count[location]
+	end
+	
+	local counted_locations = {} -- washington_dc = 68
+	
+	for _,job_id in ipairs(narr._jobs_index) do
+		local cn_map = narr.jobs[job_id].cn_map or narr.cn_locations[1]
+		if counted_locations[cn_map] then
+			counted_locations[cn_map] = counted_locations[cn_map] + 1
+		else
+			counted_locations[cn_map] = 1
+		end
+	end
+	
+	narr._get_location_used_count = counted_locations
+	return narr._get_location_used_count[location]
+end
+
+
+function NarrativeTweakData:is_location_holding_new_job(location)
+	local narr = tweak_data.narrative
+	
+	for _,job_id in ipairs(narr._jobs_index) do
+		local a = narr:is_job_new(job_id)
+		local b = narr.jobs[job_id] and (narr.jobs[job_id].cn_map or narr.cn_locations[1]) == location or false
+		if a and b then
+			return true
+		end
+	end
+	
+	return false
 end
 
 

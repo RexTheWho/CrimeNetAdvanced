@@ -310,15 +310,21 @@ function CrimeNetManager:open_quick_location_select()
 		text = "Select a location:",
 		button_list = {}
 	}
-
-	for idx, loc_id in pairs(tweak_data.narrative.cn_locations) do
+	local narr = tweak_data.narrative
+	for idx, loc_id in pairs(narr:get_locations_in_job_count_order()) do
 		local text = loc_id
 		local clean_name = string.gsub(utf8.to_upper(text), "_", " ")
+		local amount = string.format("%03d", narr:get_location_used_count(loc_id))
+		local new_jobs = narr:is_location_holding_new_job(loc_id)
+		local text_final = clean_name .. " Jobs: " .. amount
+		
+		if new_jobs then -- prefix NEW!
+			text_final = managers.localization:to_upper_text("menu_new") .. " -- " .. text_final
+		end
 		
 		table.insert(dialog_data.button_list, {
-			text = clean_name .. " «",
+			text = text_final,
 			callback_func = function()
-				-- log("picked ("..tostring(idx)..") "..loc_id)
 				self:set_crimenet_location(idx)
 			end,
 			focus_callback_func = function()
@@ -347,7 +353,7 @@ function CrimeNetManager:open_quick_location_select()
 	dialog_data.image_blend_mode = "normal"
 	dialog_data.text_blend_mode = "add"
 	dialog_data.use_text_formating = true
-	dialog_data.w = 480
+	dialog_data.w = 600
 	dialog_data.h = 532
 	dialog_data.title_font = tweak_data.menu.pd2_medium_font
 	dialog_data.title_font_size = tweak_data.menu.pd2_medium_font_size
@@ -1386,7 +1392,7 @@ end)
 
 -- _change_map
 function CrimeNetGui:update_location(idx)
-	local location_id = tweak_data.narrative.cn_locations[idx]
+	local location_id = tweak_data.narrative:get_locations_in_job_count_order()[idx]
 	
 	local map = self._map_panel:child("map")
 	
@@ -1899,7 +1905,7 @@ function CrimeNetGui:add_special_contracts(no_casino, no_quickplay)
 		
 		local job_data = tweak_data.narrative:job_data(special_contract.job_id)
 		if job_data then
-			local cn_locations = tweak_data.narrative.cn_locations
+			local cn_locations = tweak_data.narrative:get_locations_in_job_count_order()
 			local filter_loc = cn_locations[self._multi_location_item._current_name_index]
 			local cn_map_loc = job_data.cn_map or cn_locations[1]
 			-- log("Check: " .. special_contract.job_id .. " - " .. cn_map_loc .. " / " .. filter_loc)
