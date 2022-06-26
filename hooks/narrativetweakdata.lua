@@ -124,7 +124,7 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	
 	-- DC
 	self.jobs.man.cn_position = {1215,783}
-	self.jobs.family.cn_position = {1344,10096}
+	self.jobs.family.cn_position = {1344,1096}
 	self.jobs.four_stores.cn_position = {715,787}
 	self.jobs.mallcrasher.cn_position = {772,837}
 	
