@@ -2973,7 +2973,7 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	local icon_offline = not is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_offline")
 	local icon_online = is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_online")
 	local icon_online_nosteam = is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_online_nosteam")
-	if (icon_offline or icon_online) and not icon_online_nosteam then
+	if icon_offline or icon_online then
 		local cn_final_icon_atlas
 		
 		if data.host_id and not icon_online_nosteam then
@@ -2990,17 +2990,19 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 			cn_final_icon_atlas = (not not data.icon) and deep_clone(data.icon) or deep_clone(CrimeNetGui._missing_job_icon)
 		end
 		
-		local marker_dot_icon = marker_panel:bitmap({
-			name = "marker_dot_icon",
-			texture = cn_final_icon_atlas.texture,
-			texture_rect = cn_final_icon_atlas.texture_rect,
-			w = 42,
-			h = 30,
-			x = 3,
-			y = 1,
-			layer = -1,
-			color = data.marker_dot_color or color
-		})
+		if cn_final_icon_atlas then
+			local marker_dot_icon = marker_panel:bitmap({
+				name = "marker_dot_icon",
+				texture = cn_final_icon_atlas.texture,
+				texture_rect = cn_final_icon_atlas.texture_rect,
+				w = 42,
+				h = 30,
+				x = 3,
+				y = 1,
+				layer = -1,
+				color = data.marker_dot_color or color
+			})
+		end
 	end
 	
 	
