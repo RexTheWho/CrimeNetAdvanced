@@ -4,7 +4,7 @@
 	
 	"cnmap_job_icon_offline_title":			"Show Job Icon: Offline",
 	"cnmap_job_icon_online_title":			"Show Job Icon: Online",
-	"cnmap_job_icon_online_steam_title":	"Use Steam Profile Pictures",
+	"cnmap_job_icon_steam_title":			"Use Steam Profile Pictures",
 	
 	"menu_cn_location_show":			"$BTN_X Show Locations",
 	"menu_cn_location_hide":			"$BTN_X Hide Locations",

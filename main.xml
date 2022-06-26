@@ -7,19 +7,19 @@
 	<Options save_file="CrimeNetAdvanced.txt">
 		<options node_name="cnmap" title_id="cnmap_title" desc_id="cnmap_desc" build_items="true">
 			<option
-				name="cnmap_job_icon_offline"		title_id="cnmap_job_icon_offline_title"
-				save_value="true"					type="bool"
-				show_value="true"					default_value="true"
+				name="cnmap_job_icon_offline"	title_id="cnmap_job_icon_offline_title"
+				save_value="true"				type="bool"
+				show_value="true"				default_value="true"
 			/>
 			<option
-				name="cnmap_job_icon_online" 		title_id="cnmap_job_icon_online_title"
-				save_value="true"					type="bool"
-				show_value="true"					default_value="true"
+				name="cnmap_job_icon_online" 	title_id="cnmap_job_icon_online_title"
+				save_value="true"				type="bool"
+				show_value="true"				default_value="true"
 			/>
 			<option
-				name="cnmap_job_icon_online_steam"	title_id="cnmap_job_icon_online_steam_title"
-				save_value="true"					type="bool"
-				show_value="true"					default_value="true"
+				name="cnmap_job_icon_steam"		title_id="cnmap_job_icon_steam_title"
+				save_value="true"				type="bool"
+				show_value="true"				default_value="true"
 			/>
 		</options>
 	</Options>

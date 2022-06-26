@@ -2972,14 +2972,13 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	-- INNER MARKER ICON
 	local icon_offline = not is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_offline")
 	local icon_online = is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_online")
-	local icon_online_steam = is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_online_steam")
 	if icon_offline or icon_online then
+		local icon_steam = CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_steam")
 		local cn_final_icon_atlas
 		
-		if data.host_id and icon_online_steam then
-			Steam:friend_avatar(1, data.host_id, function(texture)
-				cn_final_icon_atlas.texture = texture
-				cn_final_icon_atlas.texture_rect = nil
+		if icon_steam and data.host_id then
+			Steam:friend_avatar(1, tostring(data.host_id or 1), function(texture)
+				cn_final_icon_atlas = {texture = texture}
 			end)
 		else
 			-- trimming for overkill reasons
@@ -2990,7 +2989,7 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 			cn_final_icon_atlas.texture_rect[4] = 58
 		end
 		
-		if cn_final_icon_atlas then
+		if cn_final_icon_atlas and cn_final_icon_atlas.texture then
 			local marker_dot_icon = marker_panel:bitmap({
 				name = "marker_dot_icon",
 				texture = cn_final_icon_atlas.texture,
