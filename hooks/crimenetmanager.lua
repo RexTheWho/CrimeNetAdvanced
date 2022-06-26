@@ -2983,11 +2983,11 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 			end)
 		else
 			-- trimming for overkill reasons
+			cn_final_icon_atlas = (not not data.icon) and deep_clone(data.icon) or deep_clone(CrimeNetGui._missing_job_icon)
 			cn_final_icon_atlas.texture_rect[1] = cn_final_icon_atlas.texture_rect[1] + 3
 			cn_final_icon_atlas.texture_rect[2] = cn_final_icon_atlas.texture_rect[2] + 3
 			cn_final_icon_atlas.texture_rect[3] = cn_final_icon_atlas.texture_rect[3] - 6
 			cn_final_icon_atlas.texture_rect[4] = 58
-			cn_final_icon_atlas = (not not data.icon) and deep_clone(data.icon) or deep_clone(CrimeNetGui._missing_job_icon)
 		end
 		
 		if cn_final_icon_atlas then
