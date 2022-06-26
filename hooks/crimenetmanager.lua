@@ -2303,7 +2303,7 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	
 	local num_stars = 0
 	local job_days = #tweak_data.narrative:job_chain(data.job_id)
-	local job_cash = managers.experience:cash_string(math.round(narrative_data.payout[1]))
+	
 	
 	
 	-- There must be text here or else dont apply.
@@ -2539,6 +2539,9 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	end
 
 
+	-- after stars! (0 = difficulty_stars)
+	local total_payout, base_payout, risk_payout = managers.money:get_contract_money_by_stars(num_stars, 0, job_days, data.job_id)
+	local job_cash_string = managers.experience:cash_string(math.round(total_payout))
 
 	
 	local job_tweak = tweak_data.narrative:job_data(data.job_id)
@@ -2566,7 +2569,7 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 		-- Just day info
 		managers.localization:to_upper_text("cn_menu_contract_short_" .. (job_days > 1 and "plural" or "singular"), {
 			days = job_days,
-			money = job_cash
+			money = job_cash_string
 		})
 	)
 	
