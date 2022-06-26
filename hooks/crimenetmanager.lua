@@ -1338,7 +1338,10 @@ Hooks:PostHook(CrimeNetGui, "init", "init_advanced", function(self)
 	-- Line up the map like the original map position
 	self._zoom = 2
 	self:_set_zoom("out", 0, 0)
-	self:_goto_map_position(602+640,558+360)
+	
+	
+	local map_pos = tweak_data.narrative.cn_locations_default_camera["default"]
+	self:_goto_map_position( map_pos[1], map_pos[2] )
 end)
 
 
@@ -1432,7 +1435,11 @@ function CrimeNetGui:update_location(idx)
 	self:add_special_contracts(false, false)
 	
 	-- fixes zoom/position when changing map.
-	self:_goto_map_position(602+640,558+360)
+	local map_pos = tweak_data.narrative.cn_locations_default_camera[location_id]
+		and tweak_data.narrative.cn_locations_default_camera[location_id]
+		or tweak_data.narrative.cn_locations_default_camera["default"]
+		
+	self:_goto_map_position( map_pos[1], map_pos[2] )
 end
 
 Hooks:PostHook(CrimeNetGui, "enable_crimenet", "enable_crimenet_advanced", function(self)

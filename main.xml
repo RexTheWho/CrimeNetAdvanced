@@ -1,4 +1,5 @@
 <table name="CrimeNetAdvanced" global_key="CrimeNetAdvanced" priority="100">
+	<AssetUpdates id="38171" provider="modworkshop" use_local_dir="true" version="0"/>
     <Localization directory="loc" default="english.txt">
         <loc file="english.txt" language="english"/>
     </Localization>

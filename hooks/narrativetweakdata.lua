@@ -5,7 +5,8 @@ NarrativeTweakData.FACTION_TO_LOCATION = {
 }
 
 Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak_data)
-
+	
+	
 	-- guis/textures/cn_map/..id
 	self.cn_locations = {
 		"washington_dc",
@@ -20,6 +21,24 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 		"san_francisco"
 	}
 	
+	
+	-- Map Locations
+	self.cn_locations_default_camera = {
+		default = {1200,900},
+		washington_dc = {1242,918},
+		new_york = {1300,970},
+		nevada = {1350,520},
+		los_angeles = {700,600},
+		texas = {900,700},
+		mexico = {960,1150},
+		florida = {1190,1100},
+		russia = {980,820},
+		minecraft = {600,600},
+		san_francisco = {1380,918}
+	}
+	
+	
+	-- Mark mobile jobs
 	self.jobs.arm_wrapper.cn_mobile = true
 	self.jobs.arm_cro.cn_mobile = true
 	self.jobs.arm_und.cn_mobile = true
@@ -27,37 +46,20 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	self.jobs.arm_par.cn_mobile = true
 	self.jobs.arm_fac.cn_mobile = true
 	
+	
+	-- Release date fix
 	self.jobs.ranc.date_added = {2022,6,23}
-	
-	-- self.jobs.arm_wrapper.professional = true
-	-- self.jobs.arm_cro.professional = true
-	-- self.jobs.arm_und.professional = true
-	-- self.jobs.arm_hcm.professional = true
-	-- self.jobs.arm_par.professional = true
-	-- self.jobs.arm_fac.professional = true
-	
-	-- self.jobs.arm_cro.date_added = {tonumber(os.date("%Y")),tonumber(os.date("%m")),tonumber(os.date("%d"))}
-	-- self.jobs.arm_hcm.date_added = {tonumber(os.date("%Y")),tonumber(os.date("%m")),tonumber(os.date("%d"))}
-	-- self.jobs.arm_fac.date_added = {tonumber(os.date("%Y")),tonumber(os.date("%m")),tonumber(os.date("%d"))}
-	-- self.jobs.arm_par.date_added = {tonumber(os.date("%Y")),tonumber(os.date("%m")),tonumber(os.date("%d"))}
-	-- self.jobs.arm_und.date_added = {tonumber(os.date("%Y")),tonumber(os.date("%m")),tonumber(os.date("%d"))}
-	-- self.jobs.ranc.date_added = {tonumber(os.date("%Y")),tonumber(os.date("%m")),tonumber(os.date("%d"))}
-	
-	-- self.jobs.vit.professional = true
-	
 	
 	
 	-- JC tweaking
-	self.jobs.vit.jc = 80
-	self.jobs.branchbank_gold_prof.jc = 35
+	-- self.jobs.vit.jc = 80
+	-- self.jobs.branchbank_gold_prof.jc = 35
 	
 	
-	
-	
-	-- LOCATIONS
+	-- Guess Locations
 	self:assume_cn_job_locations_from_levels(self, tweak_data)
 	
-	-- CN MAPS (Default's "dc")
+	-- Set Locations (Default's "dc")
 	self.jobs.red2.cn_map = "new_york"
 	self.jobs.run.cn_map = "new_york"
 	self.jobs.flat.cn_map = "new_york"
@@ -99,11 +101,12 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	self.jobs.bph.cn_map = "san_francisco"
 	
 	
-	-- Job story connections
+	-- Job story connections (Unused)
 	self.jobs.welcome_to_the_jungle_wrapper_prof.cn_job_next = {"mus"}
 	self.jobs.mus.cn_job_next = {"election_day"}
 	
 	
+	-- Dev
 	self.job_safety = {
 		border = 160,
 		safe_y = 36,
@@ -206,12 +209,12 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	-- NEW YORK
 	
 	-- NEVADA
-	self:cn_position_list(true, {1024,750}, {
-		"kenaz",
+	self:cn_position_list(true, {1218,252}, {
 		"pbr",
-		"born",
 		"des"
-	})
+	},{140,100})
+	self.jobs.born.cn_position = {1348,579}
+	self.jobs.kenaz.cn_position = {545,1154}
 	-- NEVADA
 	
 	-- LOS ANGELES
@@ -225,21 +228,19 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	-- TEXAS
 	
 	-- MEXICO
-	self:cn_position_list(true, {1024,750}, {
+	self:cn_position_list(true, {1308,1030}, {
 		"mex",
-		"mex_cooking",
-		"bex",
-		"pex",
-		"fex"
+		"mex_cooking"
 	})
+	self.jobs.bex.cn_position = {809,1300}
+	self.jobs.pex.cn_position = {561,1000}
+	self.jobs.fex.cn_position = {324,758}
 	-- MEXICO
 	
 	-- FLORIDA
-	self:cn_position_list(true, {1024,750}, {
-		"pal",
-		"friend",
-		"mia"
-	})
+	self.jobs.friend.cn_position = {743,1309}
+	self.jobs.pal.cn_position = {1578,1059}
+	self.jobs.mia.cn_position = {1364,533}
 	-- FLORIDA
 	
 	-- SAN FRANCISCO
@@ -251,10 +252,7 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	-- SAN FRANCISCO
 	
 	-- RUSSIA
-	self:cn_position_list(true, {1024,750}, {
-		"wz_akan",
-		"mad"
-	})
+	self.jobs.mad.cn_position = {957,796}
 	-- RUSSIA
 	
 	
