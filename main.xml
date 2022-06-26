@@ -4,12 +4,26 @@
         <loc file="english.txt" language="english"/>
     </Localization>
 	
-	<!-- <Options save_file="CrimeNetAdvanced.txt"> -->
-		<!-- <options node_name="cnmap" title_id="cnmap" desc_id="cnmap_desc" build_items="true"> -->
-			<!-- <option name="cnmap_enabled" save_value="true" type="bool" show_value="true" default_value="true"/> -->
-			<!-- <option name="cnmap_update" save_value="true" type="number" show_value="true" default_value="0.2" min="0.01" max="1.0"/> -->
-		<!-- </options> -->
-	<!-- </Options> -->
+	<Options save_file="CrimeNetAdvanced.txt">
+		<options node_name="cnmap" title_id="cnmap" desc_id="cnmap_desc" build_items="true">
+			<option
+				name="cnmap_job_icon_offline"
+				title_id="cnmap_job_icon_offline_title"
+				save_value="true"
+				type="bool"
+				show_value="true"
+				default_value="true"
+			/>
+			<option
+				name="cnmap_job_icon_online"
+				title_id="cnmap_job_icon_online_title"
+				save_value="true"
+				type="bool"
+				show_value="true"
+				default_value="true"
+			/>
+		</options>
+	</Options>
 	
 	<AddFiles directory="assets">
 		<dds force="true" path="guis/textures/cn_map/washington_dc"/>

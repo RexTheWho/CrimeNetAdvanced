@@ -4,10 +4,8 @@
 	"cnmap":											"CrimeNet Advanced",
 	"cnmap_desc":										"CrimeNet Advanced Settings.",
 	
-	"CrimeNetAdvanced_enabledTitleID":					"A",
-	"CrimeNetAdvanced_enabledDescID":					"B.",
-	"CrimeNetAdvanced_updateTitleID":					"A",
-	"CrimeNetAdvanced_updateDescID":					"B.",
+	"cnmap_job_icon_offline_title":					"Show Job Icon: Offline",
+	"cnmap_job_icon_online_title":					"Show Job Icon: Online",
 	
 	
 	

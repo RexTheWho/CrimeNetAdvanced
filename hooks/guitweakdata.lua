@@ -6,10 +6,6 @@ Hooks:PostHook(GuiTweakData, "init", "init_advanced", function(self, tweak_data)
 	self.crime_net.job_vars.new_job_max_time = 102.0
 	
 	
-	local function get_marker(id)
-		return "guis/textures/pd2/crimenet_marker_"..id
-	end
-	
 	
 	self._cn_x_start = 400
 	self._cn_y_start = 200
@@ -95,8 +91,6 @@ Hooks:PostHook(GuiTweakData, "init", "init_advanced", function(self, tweak_data)
 	
 end)
 
-
-local TMP = 0
 function GuiTweakData:build_missing_special_contracts(self, tweak_data)
 	for id, data in pairs(tweak_data.narrative.jobs) do
 		-- log("Checking... "..id)
@@ -133,11 +127,6 @@ function GuiTweakData:build_missing_special_contracts(self, tweak_data)
 		
 		-- Temp, ignore non positionsed jobs
 		if not tweak_data.narrative.jobs[id].cn_position then goto continue end
-		
-		
-		-- Temp, Only spawn limited jobs
-		-- TMP = TMP + 1
-		-- if TMP > 100 then break end
 		
 		
 		local cn_x
