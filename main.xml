@@ -34,6 +34,7 @@
 		<dds force="true" path="guis/textures/cn_map/florida"/>
 		<dds force="true" path="guis/textures/cn_map/russia"/>
 		<dds force="true" path="guis/textures/cn_map/san_francisco"/>
+		<dds force="true" path="guis/textures/cn_map/minecraft"/>
 		
 		<dds force="true" path="guis/textures/pd2/crimenet_globe"/>
 		<dds force="true" path="guis/textures/pd2/crimenet_star_half"/>

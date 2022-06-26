@@ -70,6 +70,8 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	self.jobs.brb.cn_map = "new_york"
 	self.jobs.moon.cn_map = "new_york"
 	
+	self.jobs.moon.cn_map = "minecraft"
+	
 	self.jobs.kenaz.cn_map = "nevada"
 	self.jobs.pbr.cn_map = "nevada"
 	self.jobs.pbr2.cn_map = "nevada"
