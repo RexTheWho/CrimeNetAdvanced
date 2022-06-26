@@ -181,6 +181,8 @@ function CrimeNetManager:update(t, dt)
 	-- actually spawn/update the job
 	for id, job in pairs(self._active_jobs) do
 		local preset_job = self._presets[id]
+		
+		-- Spawn job
 		if not job.added then
 			job.added = true
 			
@@ -203,15 +205,6 @@ function CrimeNetManager:update(t, dt)
 					job.mobile_to_x = CrimeNetManager.MOBILE_JOBS_SPEED
 				end
 			end
-			
-			-- TEMP
-			job.active_timer = 0.01
-			
-			-- log("______________________ JOB ______________________")
-			-- log("ADDED: idx" .. id)
-			-- _G.PrintTable(job)
-			-- log("//")
-			-- _G.PrintTable(self._presets[id])
 			
 			managers.menu_component:add_crimenet_gui_preset_job(id)
 		end
@@ -425,9 +418,9 @@ end
 function CrimeNetGui:init(ws, fullscreeen_ws, node)
 	
 	-- One time popup (can be shown again in settings)
-	local cnmap_meta_introduction = CrimeNetAdvanced.Options:GetValue("cnmap_meta_introduction")
+	local cnmap_meta_introduction = CrimeNetAdvanced.Options:GetValue("cnmap_meta_settings/cnmap_meta_introduction")
 	if cnmap_meta_introduction then
-		CrimeNetAdvanced.Options:SetValue("cnmap_meta_introduction", false)
+		CrimeNetAdvanced.Options:SetValue("cnmap_meta_settings/cnmap_meta_introduction", false)
 		self:show_cnmap_meta_introduction_popup()
 	end
 	
@@ -1710,10 +1703,6 @@ function CrimeNetGui:_update_job_by_zoom(job, ignore_zoom, icon_zoom_scale)
 	-- Cheating for looping over a bunch if icons to either show or hide based on zoom
 	local toggle_childs = {
 		job.side_panel,
-		-- job.side_panel:child("job_name"),
-		-- job.side_panel:child("contact_name"),
-		-- job.side_panel:child("info_name"),
-		-- job.side_panel:child("stars_panel"),
 		job.icon_panel,
 		job.container_panel,
 		job.marker_panel_bg
@@ -2999,10 +2988,10 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	})
 	
 	-- INNER MARKER ICON
-	local icon_offline = not is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_offline")
-	local icon_online = is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_online")
+	local icon_offline = not is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_settings/cnmap_job_icon_offline")
+	local icon_online = is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_settings/cnmap_job_icon_online")
 	if icon_offline or icon_online then
-		local icon_steam = CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_steam")
+		local icon_steam = CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_settings/cnmap_job_icon_steam")
 		local cn_final_icon_atlas
 		local using_steam_pfp = false
 		

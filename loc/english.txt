@@ -3,9 +3,12 @@
 	"cnmap_desc":						"CrimeNet Advanced Settings.",
 	
 	
+	"cnmap_job_icon_settings_title":		"Icon Options",
 	"cnmap_job_icon_offline_title":			"Show Job Icon: Offline",
 	"cnmap_job_icon_online_title":			"Show Job Icon: Online",
 	"cnmap_job_icon_steam_title":			"Use Steam Profile Pictures",
+	
+	"cnmap_meta_settings_title":			"Meta Options",
 	"cnmap_meta_introduction_title":		"Repeat Introduction",
 	
 	
@@ -15,7 +18,7 @@
 	
 	
 	"dialog_cnmap_meta_introduction_title":	"Crime.Net Advanced",
-	"dialog_cnmap_meta_introduction_text":	"INTRO!",
+	"dialog_cnmap_meta_introduction_text":	"Welcome to the new and improved Crime.Net!\n\nLine.\nLine.",
 	
 	
 	"":""
