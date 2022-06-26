@@ -390,7 +390,7 @@ end)
 function NarrativeTweakData:generate_cn_locations(self, tweak_data)
 	for _,job in ipairs(self._jobs_index) do
 		if self.jobs[job] and self.jobs[job].cn_map and not table.contains(self.cn_locations, self.jobs[job].cn_map) then
-			log("inserting new cn map location: "..self.jobs[job].cn_map)
+			-- log("inserting new cn map location: "..self.jobs[job].cn_map)
 			table.insert(self.cn_locations, self.jobs[job].cn_map)
 		end
 	end
