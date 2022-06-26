@@ -403,8 +403,33 @@ CrimeNetGui._missing_job_icon = {
 		texture_rect = {870,174,85,85}
 	}
 
+
+
+function CrimeNetGui:show_cnmap_meta_introduction_popup()
+	local dialog_data = {
+		focus_button = 1,
+		title = managers.localization:text("dialog_cnmap_meta_introduction_title"),
+		text = managers.localization:text("dialog_cnmap_meta_introduction_text")
+	}
+	local ok_button = {
+		text = managers.localization:text("dialog_ok")
+	}
+	dialog_data.button_list = {
+		ok_button
+	}
+
+	managers.system_menu:show(dialog_data)
+end
+
 -- INIT (REPLACEMENT)
 function CrimeNetGui:init(ws, fullscreeen_ws, node)
+	
+	-- One time popup (can be shown again in settings)
+	local cnmap_meta_introduction = CrimeNetAdvanced.Options:GetValue("cnmap_meta_introduction")
+	if cnmap_meta_introduction then
+		CrimeNetAdvanced.Options:SetValue("cnmap_meta_introduction", false)
+		self:show_cnmap_meta_introduction_popup()
+	end
 	
 	self._tweak_data = tweak_data.gui.crime_net
 	self._crimenet_enabled = true

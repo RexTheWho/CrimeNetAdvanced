@@ -2,13 +2,21 @@
 	"cnmap_title":						"CrimeNet Advanced",
 	"cnmap_desc":						"CrimeNet Advanced Settings.",
 	
+	
 	"cnmap_job_icon_offline_title":			"Show Job Icon: Offline",
 	"cnmap_job_icon_online_title":			"Show Job Icon: Online",
 	"cnmap_job_icon_steam_title":			"Use Steam Profile Pictures",
+	"cnmap_meta_introduction_title":		"Repeat Introduction",
+	
 	
 	"menu_cn_location_show":			"$BTN_X Show Locations",
 	"menu_cn_location_hide":			"$BTN_X Hide Locations",
 	"menu_toggle_locations":			"$BTN_X Toggle Locations",
+	
+	
+	"dialog_cnmap_meta_introduction_title":	"Crime.Net Advanced",
+	"dialog_cnmap_meta_introduction_text":	"INTRO!",
+	
 	
 	"":""
 }

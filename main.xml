@@ -21,6 +21,11 @@
 				save_value="true"				type="bool"
 				show_value="true"				default_value="true"
 			/>
+			<option
+				name="cnmap_meta_introduction"	title_id="cnmap_meta_introduction_title"
+				save_value="true"				type="bool"
+				show_value="true"				default_value="true"
+			/>
 		</options>
 	</Options>
 	
