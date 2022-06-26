@@ -2302,6 +2302,7 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 
 	
 	local num_stars = 0
+	local num_skulls = 0
 	local job_days = #tweak_data.narrative:job_chain(data.job_id)
 	
 	
@@ -2457,6 +2458,7 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 		
 		
 		local job_skulls = not not data.difficulty_id and data.difficulty_id-2 or 0 -- difficulty_id starts at 2 for normal
+		num_skulls = job_skulls
 		local is_skull = job_skulls > 0
 		local job_stars = is_skull and job_skulls or math.ceil(job_jc / 10) -- 
 		local needs_half_star = not data.is_server and (job_jc - job_stars*10) ~= 0 or false
@@ -2539,8 +2541,8 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	end
 
 
-	-- after stars! (0 = difficulty_stars)
-	local total_payout, base_payout, risk_payout = managers.money:get_contract_money_by_stars(num_stars, 0, job_days, data.job_id)
+	-- after stars!
+	local total_payout, base_payout, risk_payout = managers.money:get_contract_money_by_stars(num_stars, num_skulls, job_days, data.job_id)
 	local job_cash_string = managers.experience:cash_string(math.round(total_payout))
 
 	
