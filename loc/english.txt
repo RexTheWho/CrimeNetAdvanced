@@ -1,27 +1,14 @@
 {
-	"menu_cn_vit_heist_desc":							"The greatest heist of all",
+	"cnmap_title":						"CrimeNet Advanced",
+	"cnmap_desc":						"CrimeNet Advanced Settings.",
 	
-	"cnmap":											"CrimeNet Advanced",
-	"cnmap_desc":										"CrimeNet Advanced Settings.",
+	"cnmap_job_icon_offline_title":			"Show Job Icon: Offline",
+	"cnmap_job_icon_online_title":			"Show Job Icon: Online",
+	"cnmap_job_icon_online_nosteam_title":	"Use Steam Profile Pictures",
 	
-	"cnmap_job_icon_offline_title":					"Show Job Icon: Offline",
-	"cnmap_job_icon_online_title":					"Show Job Icon: Online",
-	
-	
-	
-	"menu_cn_location_show":		"$BTN_X Show Locations",
-	"menu_cn_location_hide":		"$BTN_X Hide Locations",
-	"menu_toggle_locations":		"$BTN_X Toggle Locations",
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	"menu_cn_location_show":			"$BTN_X Show Locations",
+	"menu_cn_location_hide":			"$BTN_X Hide Locations",
+	"menu_toggle_locations":			"$BTN_X Toggle Locations",
 	
 	"":""
 }

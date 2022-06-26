@@ -2969,18 +2969,26 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 		color = data.marker_dot_color or color
 	})
 	
+	-- INNER MARKER ICON
 	local icon_offline = not is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_offline")
 	local icon_online = is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_online")
-	if icon_offline or icon_online then
-		-- INNER MARKER ICON
-		local cn_final_icon_atlas = (not not data.icon) and deep_clone(data.icon) or deep_clone(CrimeNetGui._missing_job_icon)
+	local icon_online_nosteam = is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_online_nosteam")
+	if (icon_offline or icon_online) and not icon_online_nosteam then
+		local cn_final_icon_atlas
 		
-		-- trimming for overkill reasons
-		cn_final_icon_atlas.texture_rect[1] = cn_final_icon_atlas.texture_rect[1] + 3
-		cn_final_icon_atlas.texture_rect[2] = cn_final_icon_atlas.texture_rect[2] + 3
-		cn_final_icon_atlas.texture_rect[3] = cn_final_icon_atlas.texture_rect[3] - 6
-		cn_final_icon_atlas.texture_rect[4] = 58
-		
+		if data.host_id and not icon_online_nosteam then
+			Steam:friend_avatar(1, data.host_id, function(texture)
+				cn_final_icon_atlas.texture = texture
+				cn_final_icon_atlas.texture_rect = nil
+			end)
+		else
+			-- trimming for overkill reasons
+			cn_final_icon_atlas.texture_rect[1] = cn_final_icon_atlas.texture_rect[1] + 3
+			cn_final_icon_atlas.texture_rect[2] = cn_final_icon_atlas.texture_rect[2] + 3
+			cn_final_icon_atlas.texture_rect[3] = cn_final_icon_atlas.texture_rect[3] - 6
+			cn_final_icon_atlas.texture_rect[4] = 58
+			cn_final_icon_atlas = (not not data.icon) and deep_clone(data.icon) or deep_clone(CrimeNetGui._missing_job_icon)
+		end
 		
 		local marker_dot_icon = marker_panel:bitmap({
 			name = "marker_dot_icon",
@@ -2990,7 +2998,7 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 			h = 30,
 			x = 3,
 			y = 1,
-			layer = 2,
+			layer = -1,
 			color = data.marker_dot_color or color
 		})
 	end
