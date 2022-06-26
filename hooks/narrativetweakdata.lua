@@ -100,6 +100,10 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	self.jobs.pent.cn_map = "san_francisco"
 	self.jobs.bph.cn_map = "san_francisco"
 	
+	if self.jobs["mc_jewelrystore"]	then self.jobs.mc_jewelrystore.cn_map = "minecraft"	end
+	if self.jobs["mc_branchbank"]	then self.jobs.mc_branchbank.cn_map = "minecraft"	end
+	if self.jobs["mc_shoveforge"]	then self.jobs.mc_shoveforge.cn_map = "minecraft"	end
+	
 	
 	-- Job story connections (Unused)
 	self.jobs.welcome_to_the_jungle_wrapper_prof.cn_job_next = {"mus"}
