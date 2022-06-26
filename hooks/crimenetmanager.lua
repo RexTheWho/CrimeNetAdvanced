@@ -2972,11 +2972,11 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	-- INNER MARKER ICON
 	local icon_offline = not is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_offline")
 	local icon_online = is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_online")
-	local icon_online_nosteam = is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_online_nosteam")
+	local icon_online_steam = is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_online_steam")
 	if icon_offline or icon_online then
 		local cn_final_icon_atlas
 		
-		if data.host_id and not icon_online_nosteam then
+		if data.host_id and icon_online_steam then
 			Steam:friend_avatar(1, data.host_id, function(texture)
 				cn_final_icon_atlas.texture = texture
 				cn_final_icon_atlas.texture_rect = nil
