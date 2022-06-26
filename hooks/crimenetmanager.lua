@@ -1781,7 +1781,7 @@ function CrimeNetGui:update_server_job(data, i)
 	local job = self._jobs[job_index]
 
 	if not job then
-		log("[CrimeNetGui] server no job")
+		-- log("[CrimeNetGui] server no job")
 		return
 	end
 
