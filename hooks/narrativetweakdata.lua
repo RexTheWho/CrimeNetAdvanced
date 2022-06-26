@@ -22,6 +22,7 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	}
 	
 	
+	
 	-- Map Locations
 	self.cn_locations_default_camera = {
 		default = {1200,900},
@@ -380,7 +381,21 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	-- shayu
 	self.jobs.ranc.cn_icon_id = tweak_data.hud_icons.C_McShay_H_MindlandRanch_AllDiffs_D0 
 	
+	
+	--
+	self:generate_cn_locations(self, tweak_data)
 end)
+
+
+function NarrativeTweakData:generate_cn_locations(self, tweak_data)
+	for _,job in ipairs(self._jobs_index) do
+		if self.jobs[job] and self.jobs[job].cn_map and not table.contains(self.cn_locations, self.jobs[job].cn_map) then
+			log("inserting new cn map location: "..self.jobs[job].cn_map)
+			table.insert(self.cn_locations, self.jobs[job].cn_map)
+		end
+	end
+end
+
 
 
 -- assumes location by chains level factions

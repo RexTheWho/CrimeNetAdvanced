@@ -1320,10 +1320,9 @@ function CrimeNetGui:init(ws, fullscreeen_ws, node)
 			managers.features:announce_feature("dlc_gage_pack_jobs")
 		end
 	end
-
+	
 	managers.challenge:fetch_challenges()
 end
-
 
 
 -- INIT (POSTHOOK)
@@ -2980,13 +2979,22 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	if icon_offline or icon_online then
 		local icon_steam = CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_steam")
 		local cn_final_icon_atlas
+		local using_steam_pfp = false
 		
 		if icon_steam and data.host_id then
+			-- steam pfp
+			-- duplicate fixes loading issues for some reason
+			Steam:friend_avatar(1, tostring(1), function(texture)
+				cn_final_icon_atlas = {texture = texture}
+				using_steam_pfp = true
+			end)
+			
 			Steam:friend_avatar(1, tostring(data.host_id or 1), function(texture)
 				cn_final_icon_atlas = {texture = texture}
+				using_steam_pfp = true
 			end)
 		else
-			-- trimming for overkill reasons
+			-- default icons
 			cn_final_icon_atlas = (not not data.icon) and deep_clone(data.icon) or deep_clone(CrimeNetGui._missing_job_icon)
 			cn_final_icon_atlas.texture_rect[1] = cn_final_icon_atlas.texture_rect[1] + 3
 			cn_final_icon_atlas.texture_rect[2] = cn_final_icon_atlas.texture_rect[2] + 3
@@ -3003,7 +3011,7 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 				h = 30,
 				x = 3,
 				y = 1,
-				layer = -1,
+				layer = using_steam_pfp and -1 or 2,
 				color = data.marker_dot_color or color
 			})
 		end
