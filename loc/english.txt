@@ -8,6 +8,10 @@
 	"cnmap_job_icon_online_title":			"Show Job Icon: Online",
 	"cnmap_job_icon_steam_title":			"Use Steam Profile Pictures",
 	
+	"cnmap_prog_settings_title":			"Progression Options",
+	"cnmap_prog_levellock_title":			"Lock Jobs to Reputation",
+	"cnmap_prog_infamyunlock_title":		"Ignore Locks at Infamy Level",
+	
 	"cnmap_meta_settings_title":			"Meta Options",
 	"cnmap_meta_introduction_title":		"Repeat Introduction",
 	
@@ -18,7 +22,7 @@
 	
 	
 	"dialog_cnmap_meta_introduction_title":	"Crime.Net Advanced",
-	"dialog_cnmap_meta_introduction_text":	"Welcome to the new and improved Crime.Net!\n\nLine.\nLine.",
+	"dialog_cnmap_meta_introduction_text":	"Welcome to the new and improved Crime.Net!\n\nAn reputation lock system is enabled by default. Reputation settings can be tweaked or disabled in the \"Progression\" options in this mods options menu.\n\nEnjoy.",
 	
 	
 	"":""

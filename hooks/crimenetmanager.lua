@@ -382,19 +382,19 @@ end
 ------------------------------------------
 
 -- Use JC level as level lock for jobs.
-CrimeNetGui._use_crimenet_jc_level_locking = false
+CrimeNetGui._use_crimenet_jc_level_locking = CrimeNetAdvanced.Options:GetValue("cnmap_prog_settings/cnmap_prog_levellock")
 
 -- Ignore level locking at this level of infamy and higher
-CrimeNetGui._infamy_level_ignore_jc_lock = 10
+CrimeNetGui._infamy_level_ignore_jc_lock = math.ceil(CrimeNetAdvanced.Options:GetValue("cnmap_prog_settings/cnmap_prog_infamyunlock"))
 
 -- For development use, logs XY coords on click.
 CrimeNetGui._debug_cn_drawing = false
 
 -- For development use, logs XY coords on click.
 CrimeNetGui._missing_job_icon = {
-		texture = "guis/dlcs/trk/textures/pd2/achievements_atlas5",
-		texture_rect = {870,174,85,85}
-	}
+	texture = "guis/dlcs/trk/textures/pd2/achievements_atlas5",
+	texture_rect = {870,174,85,85}
+}
 
 
 

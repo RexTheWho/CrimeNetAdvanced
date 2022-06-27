@@ -25,6 +25,22 @@
 				/>
 			</option_group>
 			
+			<!-- PROGRESS SETTINGS -->
+			<option_group build_menu="true" name="cnmap_prog_settings" title_id="cnmap_prog_settings_title">
+				<option
+					name="cnmap_prog_levellock"		title_id="cnmap_prog_levellock_title"
+					save_value="true"				type="bool"
+					show_value="true"				default_value="true"
+				/>
+				<option
+					name="cnmap_prog_infamyunlock"	title_id="cnmap_prog_infamyunlock_title"
+					save_value="true"				type="number"
+					show_value="true"				default_value="1"
+					min="1"							max="500"
+					step="1"
+				/>
+			</option_group>
+			
 			<!-- META SETTINGS -->
 			<option_group build_menu="true" name="cnmap_meta_settings" title_id="cnmap_meta_settings_title">
 				<option
