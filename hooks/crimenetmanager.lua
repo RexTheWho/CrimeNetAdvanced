@@ -1695,17 +1695,13 @@ function CrimeNetGui:_update_job_by_zoom(job, ignore_zoom, icon_zoom_scale)
 	-- log("icon_zoom_scale "..tostring(icon_zoom_scale))
 
 	local marker_panel = job.marker_panel
-	
-	if not marker_panel then log("fail") return end
-	
 	local select_panel = marker_panel:child("select_panel")
 	
 	-- Cheating for looping over a bunch if icons to either show or hide based on zoom
 	local toggle_childs = {
 		job.side_panel,
 		job.icon_panel,
-		job.container_panel,
-		job.marker_panel_bg
+		job.container_panel
 	}
 	
 	-- icons
@@ -1742,17 +1738,19 @@ function CrimeNetGui:_update_job_by_zoom(job, ignore_zoom, icon_zoom_scale)
 		marker_panel_dot:set_world_center(select_panel:world_center())
 	end
 	
-	if job.marker_panel_bg then
-		job.marker_panel_bg:set_w(96 * icon_zoom_scale)
-		job.marker_panel_bg:set_h(64 * icon_zoom_scale)
+	local marker_panel_icon_bg = job.marker_panel_bg:child("marker_outline")
+	if job.marker_panel_bg and marker_panel_icon_bg then
+		marker_panel_icon_bg:set_w(96 * icon_zoom_scale)
+		marker_panel_icon_bg:set_h(64 * icon_zoom_scale)
+		marker_panel_icon_bg:set_center(job.marker_panel_bg:w() / 2, job.marker_panel_bg:h() / 2)
 		job.marker_panel_bg:set_world_center(select_panel:world_center())
 	end
-	
+
 	if job.heat_glow then
 		local heat_size = 256 * icon_zoom_scale
 		job.heat_glow:set_w(heat_size)
 		job.heat_glow:set_h(heat_size)
-		job.heat_glow:set_world_center(job.marker_panel:child("select_panel"):world_center())
+		job.heat_glow:set_world_center(marker_panel:child("select_panel"):world_center())
 	end
 	
 	if job.peers_panel then
@@ -1768,7 +1766,6 @@ function CrimeNetGui:get_icon_zoom_scale()
 	
 	local icon_zoom_scale = (ignore_zoom and ignore_zoom == true) and 1 or
 							(self._zoom < zoom_threshold) and self._zoom/zoom_threshold or
-							-- (self._zoom > zoom_threshold_in) and self._zoom/zoom_threshold_in or
 							1
 	
 	return icon_zoom_scale
@@ -2990,22 +2987,19 @@ function CrimeNetGui:_create_static_job_gui(data, type, fixed_x, fixed_y, fixed_
 	-- INNER MARKER ICON
 	local icon_offline = not is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_settings/cnmap_job_icon_offline")
 	local icon_online = is_server and CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_settings/cnmap_job_icon_online")
+	local using_steam_pfp = false
 	if icon_offline or icon_online then
 		local icon_steam = CrimeNetAdvanced.Options:GetValue("cnmap_job_icon_settings/cnmap_job_icon_steam")
 		local cn_final_icon_atlas
-		local using_steam_pfp = false
 		
 		if icon_steam and data.host_id then
 			-- steam pfp
-			-- duplicate fixes loading issues for some reason
-			Steam:friend_avatar(1, tostring(1), function(texture)
+			using_steam_pfp = true
+			Steam:friend_avatar(Steam.SMALL_AVATAR, tostring(76561198059852641), function(texture)
 				cn_final_icon_atlas = {texture = texture}
-				using_steam_pfp = true
 			end)
-			
-			Steam:friend_avatar(1, tostring(data.host_id or 1), function(texture)
+			Steam:friend_avatar(Steam.SMALL_AVATAR, tostring(data.host_id), function(texture)
 				cn_final_icon_atlas = {texture = texture}
-				using_steam_pfp = true
 			end)
 		else
 			-- default icons
