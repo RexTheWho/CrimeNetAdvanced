@@ -216,6 +216,7 @@ Hooks:PostHook(NarrativeTweakData, "init", "init_advanced", function(self, tweak
 	-- NEVADA
 	self:cn_position_list(true, {1218,252}, {
 		"pbr",
+		"pbr2",
 		"des"
 	},{140,100})
 	self.jobs.born.cn_position = {1348,579}
